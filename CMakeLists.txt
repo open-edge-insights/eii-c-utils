@@ -122,6 +122,15 @@ install(
     DESTINATION
         ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
+
+# Export targets to a script
+install(EXPORT eisutils-targets
+    FILE
+        EISUtilsTargets.cmake
+    DESTINATION
+        ${INSTALL_CONFIGDIR}
+)
+
 # Create a ConfigVersion.cmake file
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
