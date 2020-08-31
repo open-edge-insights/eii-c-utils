@@ -60,9 +60,8 @@ file(GLOB SOURCES "src/*.c" "src/*.cpp")
 # Add target
 add_library(eisutils SHARED ${SOURCES})
 target_link_libraries(eisutils
-    PUBLIC
-        ${EISMsgEnv_LIBRARIES}
     PRIVATE
+        ${EISMsgEnv_LIBRARIES}
         ${CJSON_LIBRARIES}
         ${OpenCV_LIBRARIES}
         ${IntelSafeString_LIBRARIES}
