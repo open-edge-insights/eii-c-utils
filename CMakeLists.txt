@@ -33,7 +33,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" "${EIS_COMMON_CMAKE}")
 
 # Find packages
 find_package(cJSON REQUIRED)
-find_package(EISMsgEnv REQUIRED)
 find_package(IntelSafeString REQUIRED)
 find_package(WJE REQUIRED)
 
@@ -50,7 +49,6 @@ endif()
 include_directories(
     include/
     ${CJSON_LIBRARIES}/
-    ${EISMsgEnv_INCLUDE}/
     ${IntelSafeString_INCLUDE}/
     ${WJE_INCLUDE_DIRS})
 
@@ -61,7 +59,6 @@ file(GLOB SOURCES "src/*.c" "src/*.cpp")
 add_library(eisutils SHARED ${SOURCES})
 target_link_libraries(eisutils
     PRIVATE
-        ${EISMsgEnv_LIBRARIES}
         ${CJSON_LIBRARIES}
         ${OpenCV_LIBRARIES}
         ${IntelSafeString_LIBRARIES}
