@@ -23,8 +23,8 @@
  * @brief Logging primitives
  */
 
-#ifndef _EIS_UTIL_LOG_H
-#define _EIS_UTIL_LOG_H
+#ifndef _EII_UTIL_LOG_H
+#define _EII_UTIL_LOG_H
 
 #include <time.h>
 #include <stdio.h>
@@ -148,4 +148,4 @@ log_lvl_t get_log_level();
 }
 #endif
 
-#endif // _EIS_UTIL_LOG_H
+#endif // _EII_UTIL_LOG_H

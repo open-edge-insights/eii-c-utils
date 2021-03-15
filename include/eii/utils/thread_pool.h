@@ -22,8 +22,8 @@
  * @file
  * @brief Thread pool
  */
-#ifndef _EIS_THREAD_POOL_QUEUE_H
-#define _EIS_THREAD_POOL_QUEUE_H
+#ifndef _EII_THREAD_POOL_QUEUE_H
+#define _EII_THREAD_POOL_QUEUE_H
 
 #include <atomic>
 #include <mutex>
@@ -31,9 +31,9 @@
 #include <thread>
 #include <condition_variable>
 
-#include "eis/utils/thread_safe_queue.h"
+#include "eii/utils/thread_safe_queue.h"
 
-namespace eis {
+namespace eii {
 namespace utils {
 
 // Forward declaration
@@ -207,6 +207,6 @@ public:
 };
 
 } // utils
-} // eis
+} // eii
 
-#endif //_EIS_THREAD_POOL_QUEUE_H
+#endif //_EII_THREAD_POOL_QUEUE_H

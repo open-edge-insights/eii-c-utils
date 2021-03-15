@@ -3,10 +3,10 @@ exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include
 
-Name: libeisutils
-Description: EIS Utils library.
+Name: libeiiutils
+Description: EII Utils library.
 Version: @PROJECT_VERSION@
 
-Libs: -L${libdir} -leisutils
+Libs: -L${libdir} -leiiutils
 Libs.private: @PRIVATE_LIBS@
 Cflags: -I${includedir}

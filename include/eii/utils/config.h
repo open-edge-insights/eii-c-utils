@@ -20,11 +20,11 @@
 
 /**
  * @file
- * @brief EIS configuration interface
+ * @brief EII configuration interface
  */
 
-#ifndef _EIS_CONFIG_IFACE_H
-#define _EIS_CONFIG_IFACE_H
+#ifndef _EII_CONFIG_IFACE_H
+#define _EII_CONFIG_IFACE_H
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -238,4 +238,4 @@ void config_value_destroy(config_value_t* value);
 } // extern "C"
 #endif
 
-#endif // _EIS_CONFIG_IFACE_H
+#endif // _EII_CONFIG_IFACE_H

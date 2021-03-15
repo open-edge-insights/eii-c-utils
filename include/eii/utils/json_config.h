@@ -23,17 +23,17 @@
  * @brief Utility function for using a JSON file as the mesage bus config
  */
 
-#ifndef _EIS_UTILS_JSON_CONFIG_H
-#define _EIS_UTILS_JSON_CONFIG_H
+#ifndef _EII_UTILS_JSON_CONFIG_H
+#define _EII_UTILS_JSON_CONFIG_H
 
-#include "eis/utils/config.h"
+#include "eii/utils/config.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * Create a configuration object for the EIS message bus which pulls config
+ * Create a configuration object for the EII message bus which pulls config
  * values from the given JSON file.
  *
  * \note Will return NULL if an error is encountered.
@@ -63,4 +63,4 @@ config_value_t* get_config_value(const void* o, const char* key);
 }
 #endif
 
-#endif // _EIS_UTILS_JSON_CONFIG_H
+#endif // _EII_UTILS_JSON_CONFIG_H

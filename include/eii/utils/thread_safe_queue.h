@@ -22,15 +22,15 @@
  * @file
  * @brief Thread safe queue implementation
  */
-#ifndef _EIS_THREAD_SAFE_QUEUE_H
-#define _EIS_THREAD_SAFE_QUEUE_H
+#ifndef _EII_THREAD_SAFE_QUEUE_H
+#define _EII_THREAD_SAFE_QUEUE_H
 
 #include <chrono>
 #include <queue>
 #include <mutex>
 #include <condition_variable>
 
-namespace eis {
+namespace eii {
 namespace utils {
 
 /**
@@ -210,6 +210,6 @@ public:
 };
 
 } // utils
-} // eis
+} // eii
 
-#endif // _EIS_THREAD_SAFE_QUEUE_H
+#endif // _EII_THREAD_SAFE_QUEUE_H

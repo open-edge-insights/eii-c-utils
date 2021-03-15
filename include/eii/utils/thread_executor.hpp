@@ -23,15 +23,15 @@
  * @brief Thread Executor Utility
  */
 
-#ifndef EIS_UTILS_INCLUDE_THREAD_EXECUTOR_H_
-#define EIS_UTILS_INCLUDE_THREAD_EXECUTOR_H_
+#ifndef EII_UTILS_INCLUDE_THREAD_EXECUTOR_H_
+#define EII_UTILS_INCLUDE_THREAD_EXECUTOR_H_
 
 #include <functional>
 #include <thread>
 #include <vector>
 #include <atomic>
 
-namespace eis {
+namespace eii {
 namespace utils {
 
 typedef std::function<void(int, std::atomic<bool>&, void*)> ExecutorRunMethod;
@@ -99,6 +99,6 @@ class ThreadExecutor {
 
 
 }  // namespace utils
-}  // namespace eis
+}  // namespace eii
 
-#endif  // EIS_UTILS_INCLUDE_THREAD_EXECUTOR_H_
+#endif  // EII_UTILS_INCLUDE_THREAD_EXECUTOR_H_

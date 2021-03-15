@@ -23,8 +23,8 @@
  * @brief String utility functions
  */
 
-#ifndef _EIS_UTILS_STRING_H
-#define _EIS_UTILS_STRING_H
+#ifndef _EII_UTILS_STRING_H
+#define _EII_UTILS_STRING_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -81,4 +81,4 @@ char** get_host_port(const char* end_point);
 } // __cplusplus
 #endif
 
-#endif // _EIS_UTILS_STRING_H
+#endif // _EII_UTILS_STRING_H

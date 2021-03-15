@@ -18,10 +18,10 @@
 # FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-get_filename_component(EISUtils_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+get_filename_component(EIIUtils_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 include(CMakeFindDependencyMacro)
 
-list(APPEND CMAKE_MODULE_PATH ${EISMessageBus_CMAKE_DIR})
+list(APPEND CMAKE_MODULE_PATH ${EIIMessageBus_CMAKE_DIR})
 
 # NOTE Had to use find_package because find_dependency does not support
 # COMPONENTS or MODULE until 3.8.0
@@ -30,9 +30,9 @@ find_package(cJSON REQUIRED)
 # Include header directories
 include_directories(${CJSON_INCLUDE_DIRS})
 
-if(NOT TARGET EISUtils)
-    include("${EISUtils_CMAKE_DIR}/EISUtilsTargets.cmake")
+if(NOT TARGET EIIUtils)
+    include("${EIIUtils_CMAKE_DIR}/EIIUtilsTargets.cmake")
 endif()
 
-set(EISUtils_LIBRARIES EISUtils)
-set(EISUtils_INCLUDE ${INSTALL_LIBDIR}/include)
+set(EIIUtils_LIBRARIES EIIUtils)
+set(EIIUtils_INCLUDE ${INSTALL_LIBDIR}/include)
