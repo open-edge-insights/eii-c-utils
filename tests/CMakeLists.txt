@@ -19,7 +19,7 @@
 # IN THE SOFTWARE.
 
 set(CMAKE_CXX_STANDARD 11)
-configure_file(${EII_COMMON_CMAKE}/GoogleTestCMakeLists.txt.in googletest-download/CMakeLists.txt)
+configure_file(${EII_C_UTILS_CMAKE}/GoogleTestCMakeLists.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
                 RESULT_VARIABLE result
                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/googletest-download)
@@ -73,3 +73,10 @@ add_test(NAME thp-tests COMMAND thp-tests)
 add_executable(thexec-tests "thread_executor_tests.cpp")
 target_link_libraries(thexec-tests eiiutils gtest_main)
 add_test(NAME thexec-tests COMMAND thexec-tests)
+
+# Build the test shared library
+add_library(test SHARED "test_library.c")
+
+add_executable(dynlibload-tests "dynlibload_tests.cpp")
+target_link_libraries(dynlibload-tests eiiutils gtest_main)
+add_test(NAME dynlibload-tests COMMAND dynlibload-tests)

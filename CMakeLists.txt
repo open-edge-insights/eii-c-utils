@@ -25,11 +25,12 @@ project(eii-utils VERSION 1.0.0 LANGUAGES C CXX)
 option(WITH_TESTS    "Compile with unit tests" OFF)
 
 set(EII_COMMON_CMAKE "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake")
+set(EII_C_UTILS_CMAKE "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(CMAKE_CXX_STANDARD 14)
 
 # Include directory for CMake modules
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" "${EII_COMMON_CMAKE}")
+set(CMAKE_MODULE_PATH "${EII_C_UTILS_CMAKE}")
 
 # Find packages
 find_package(cJSON REQUIRED)
@@ -62,7 +63,8 @@ target_link_libraries(eiiutils
         ${CJSON_LIBRARIES}
         ${OpenCV_LIBRARIES}
         ${IntelSafeString_LIBRARIES}
-        ${WJE_LIBRARIES})
+        ${WJE_LIBRARIES}
+        ${CMAKE_DL_LIBS})
 
 # If compile in debug mode, set DEBUG flag for C code
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
