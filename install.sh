@@ -139,4 +139,27 @@ log_info "Installing cJSON library"
 make install
 check_error "Failed to install cJSON library"
 
+cd ../../../
+
+cd IntelSafeString/
+if [ ! -d "build" ] ; then
+    mkdir build/
+    check_error "Failed to create build directory"
+fi
+
+cd build/
+check_error "Failed to change to build directory"
+
+log_info "Configuring IntelSafeString for compilation"
+cmake ..
+check_error "Failed to configure IntelSafeString"
+
+log_info "Compiling IntelSafeString libary"
+make -j$(nproc --ignore=2)
+check_error "Failed to compile IntelSafeString library"
+
+log_info "Installing IntelSafeString library"
+make install
+check_error "Failed to install IntelSafeString library"
+
 log_info "Done."
