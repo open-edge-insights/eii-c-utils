@@ -48,6 +48,7 @@ function check_error() {
     fi
 }
 
+CUR_DIR=`pwd`
 INSTALL_PATH="$CMAKE_INSTALL_PREFIX/lib"
 wjelement_commit="1c792c1669fd8441cf17647facc0cc908441dc0d"
 # cjson version
@@ -147,6 +148,32 @@ else
     log_info "Installing cJSON library"
     make install
     check_error "Failed to install cJSON library"
+fi
+
+# Installing IntelSafeString dependency
+if [ -f "$INSTALL_PATH/libsafestring.so" ]; then
+    log_info "libsafestring already installed"
+else
+    cd $CUR_DIR/IntelSafeString
+    if [ ! -d "build" ] ; then
+        mkdir build/
+        check_error "Failed to create build directory"
+    fi
+
+    cd build/
+    check_error "Failed to change to build directory"
+
+    log_info "Configuring IntelSafeString for compilation"
+    cmake ..
+    check_error "Failed to configure IntelSafeString"
+
+    log_info "Compiling IntelSafeString libary"
+    make -j$(nproc --ignore=2)
+    check_error "Failed to compile IntelSafeString library"
+
+    log_info "Installing IntelSafeString library"
+    make install
+    check_error "Failed to install IntelSafeString library"
 fi
 
 log_info "Done."

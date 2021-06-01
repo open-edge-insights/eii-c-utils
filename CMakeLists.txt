@@ -64,7 +64,7 @@ target_link_libraries(eiiutils
         ${CJSON_LIBRARIES}
         ${OpenCV_LIBRARIES}
         ${IntelSafeString_LIBRARIES}
-        ${CMAKE_DL_LIBS})
+        ${CMAKE_DL_LIBS}
         ${WJE_LIBRARY})
 
 # If compile in debug mode, set DEBUG flag for C code
