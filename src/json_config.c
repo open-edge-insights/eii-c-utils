@@ -64,6 +64,10 @@ bool set_config_value(config_t* config, const char* key, config_value_t* item) {
         LOG_DEBUG("Key %s not found", key);
         cJSON_AddItemToObject(c_json, key, c_json_item);
     }
+
+    if (c_json_item != NULL){
+        cJSON_Delete(c_json_item);
+    }
     return true;
 }
 
@@ -187,7 +191,9 @@ config_value_t* get_array_item(const void* array, int idx) {
         LOG_ERROR("No item at index '%d' in JSON array", idx);
         return NULL;
     }
-    return json_to_cvt(item);
+    config_value_t* value = json_to_cvt(item);
+    cJSON_Delete(item);
+    return value;
 }
 
 config_value_t* get_config_value(const void* o, const char* key) {
@@ -202,7 +208,9 @@ config_value_t* get_config_value(const void* o, const char* key) {
         LOG_WARN("JSON does not contain key: %s", key);
         return NULL;
     }
-    return json_to_cvt(obj);
+    config_value_t* value = json_to_cvt(obj);
+    cJSON_Delete(obj);
+    return value;
 }
 
 // Helper function to convert cJSON object to config_value_t structure.
