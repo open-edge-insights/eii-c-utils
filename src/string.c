@@ -27,7 +27,7 @@
 #include "eii/utils/logger.h"
 #include "eii/utils/string.h"
 
-#define MAX_ENDPOINT_LEN 128
+#define MAX_ENDPOINT_LEN 1024
 
 // helper function to fetch host & port from endpoint
 char** get_host_port(const char* end_point) {
