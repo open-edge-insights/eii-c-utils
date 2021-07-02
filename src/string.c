@@ -27,14 +27,11 @@
 #include "eii/utils/logger.h"
 #include "eii/utils/string.h"
 
-#define MAX_ENDPOINT_LEN 1024
-
 // helper function to fetch host & port from endpoint
 char** get_host_port(const char* end_point) {
     char** host_port = NULL;
     char* data = NULL;
-    const size_t end_point_len = strnlen_s(end_point, MAX_ENDPOINT_LEN);
-    host_port = (char **) calloc(end_point_len, sizeof(char*));
+    host_port = (char **)calloc(strlen(end_point) + 1, sizeof(char*));
     if (host_port == NULL) {
         LOG_ERROR_0("Calloc failed for host_port");
         return NULL;
@@ -44,20 +41,8 @@ char** get_host_port(const char* end_point) {
     char* host = NULL;
     char* port = NULL;
     int ret = 0;
-    char* end_point_temp = (char*) malloc(end_point_len * sizeof(char));
-    if (end_point_temp == NULL) {
-        LOG_ERROR_0("malloc() failed for end_point copy");
-        goto err;
-    }
-    // Make a copy of end_point string to use in strtok_r() so the same remains unaltered
-    ret = strncpy_s(end_point_temp, MAX_ENDPOINT_LEN, end_point, end_point_len);
-    if (ret != 0) {
-        LOG_ERROR("String copy failed (errno: %d) : Failed to copy data \" %s \" to host_port", ret, end_point);
-        goto err;
-    }
-    char* end_point_ptr = end_point_temp;
-    while ((data = strtok_r(end_point_ptr, ":", &end_point_ptr))) {
-        data_len = strnlen_s(data, MAX_ENDPOINT_LEN - 1);
+    while ((data = strtok_r(end_point, ":", &end_point))) {
+        data_len = strlen(data);
         if (host_port[i] == NULL) {
             host_port[i] = (char*) malloc(data_len + 1);
         }
@@ -70,19 +55,16 @@ char** get_host_port(const char* end_point) {
             LOG_ERROR("String copy failed (errno: %d) : Failed to copy data \" %s \" to host_port", ret, data);
             goto err;
         }
-	i++;
+        i++;
     }
-    free(end_point_temp);
     return host_port;
     err:
-        if (end_point_temp != NULL) {
-                free(end_point_temp);
-        }
         if (host_port != NULL) {
             free_mem(host_port);
         }
     return NULL;
 }
+
 
 // Helper function to trim strings
 void trim(char* str_value) {
