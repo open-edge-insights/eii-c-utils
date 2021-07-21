@@ -1,3 +1,11 @@
+**Contents**
+
+- [EII Utils](#eii-utils)
+  - [Dependency Installation](#dependency-installation)
+  - [Compilation](#compilation)
+  - [Installation](#installation)
+  - [Running Unit Tests](#running-unit-tests)
+
 # EII Utils
 
 EII Utils is a C library providing commonly used APIs across the C/C++ EII modules, EII Message Bus and Config Manager libraries.

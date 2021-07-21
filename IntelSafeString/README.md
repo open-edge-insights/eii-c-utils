@@ -1,3 +1,9 @@
+**Contents**
+
+- [Intel SafeString library](#intel-safestring-library)
+  - [Compilation](#compilation)
+  - [Installation](#installation)
+
 # Intel SafeString library
 
 This library includes routines for safe string operations (like strcpy) and memory routines (like memcpy) that are recommended for Linux/Android operating systems, and will also work for Windows. This library is especially useful for cross-platform situations where one library for these routines is preferred.
