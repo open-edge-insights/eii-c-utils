@@ -26,6 +26,7 @@ list(APPEND CMAKE_MODULE_PATH ${EIIMessageBus_CMAKE_DIR})
 # NOTE Had to use find_package because find_dependency does not support
 # COMPONENTS or MODULE until 3.8.0
 find_package(cJSON REQUIRED)
+find_package(IntelSafeString REQUIRED)
 
 # Include header directories
 include_directories(${CJSON_INCLUDE_DIRS})
@@ -34,5 +35,5 @@ if(NOT TARGET EIIUtils)
     include("${EIIUtils_CMAKE_DIR}/EIIUtilsTargets.cmake")
 endif()
 
-set(EIIUtils_LIBRARIES EIIUtils)
+set(EIIUtils_LIBRARIES EIIUtils IntelSafeString)
 set(EIIUtils_INCLUDE ${INSTALL_LIBDIR}/include)

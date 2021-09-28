@@ -60,6 +60,8 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 # Add target
 add_library(eiiutils SHARED ${SOURCES})
 target_link_libraries(eiiutils
+    PUBLIC
+        pthread
     PRIVATE
         ${CJSON_LIBRARIES}
         ${OpenCV_LIBRARIES}
