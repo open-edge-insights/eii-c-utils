@@ -155,10 +155,12 @@ if [ -f "$INSTALL_PATH/libsafestring.so" ]; then
     log_info "libsafestring already installed"
 else
     cd $CUR_DIR/IntelSafeString
-    if [ ! -d "build" ] ; then
-        mkdir build/
-        check_error "Failed to create build directory"
-    fi
+
+    rm -rf build
+    check_error "Failed to remove existing build directory"
+
+    mkdir build
+    check_error "Failed to create build directory"
 
     cd build/
     check_error "Failed to change to build directory"
