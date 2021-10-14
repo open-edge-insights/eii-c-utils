@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Intel Corporation.
+# Copyright (c) 2021 Intel Corporation.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -18,18 +18,24 @@
 # FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 2.8.2)
+# Find wjelement
+find_path(CJSON_INCLUDE_DIR
+    NAMES cJSON.h
+    HINTS
+        /usr/local/include/cjson
+        /usr/include/cjson)
+if(NOT CJSON_INCLUDE_DIR)
+    message(FATAL_ERROR "-- Failed to find cJSON include path")
+endif()
 
-project(safestring-download NONE)
+find_library(CJSON_LIBRARY NAMES cjson)
+if(NOT CJSON_LIBRARY)
+    message(FATAL_ERROR "-- Failed to find cJSON library")
+endif()
 
-include(ExternalProject)
-ExternalProject_Add(safestring
-  GIT_REPOSITORY    https://github.com/intel/safestringlib.git
-  GIT_TAG           5f8ce199e491c5bea65fdef85b671a25f252768d
-  SOURCE_DIR        "${CMAKE_CURRENT_SOURCE_DIR}/safestring-src"
-  BINARY_DIR        "${CMAKE_CURRENT_BINARY_DIR}/safestring-build"
-  CONFIGURE_COMMAND ""
-  BUILD_COMMAND     ""
-  INSTALL_COMMAND   ""
-  TEST_COMMAND      ""
-)
+set(CJSON_LIBRARIES ${CJSON_LIBRARY})
+set(CJSON_INCLUDE_DIRS ${CJSON_INCLUDE_DIR})
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(
+    CJSON DEFAULT_MSG CJSON_LIBRARIES CJSON_INCLUDE_DIRS)

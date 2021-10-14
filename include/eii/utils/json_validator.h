@@ -23,51 +23,44 @@
  * @brief Utility function for validating a JSON file
  */
 
-#include <wjelement.h>
-#include <wjreader.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
+#ifndef _EII_UTILS_JSON_VALID_H
+#define _EII_UTILS_JSON_VALID_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace eii {
+namespace utils {
 
 /**
- * Callback that automatically get called
- * internally to free/cleanup open schema
+ * Validate that the json data adheres to the given schema.
  *
- *
- * @param schema - schema json object
- * @param client  - Calling object
- * @return NULL
+ * @param schema     - Raw bytes of the JSON schema
+ * @param json_bytes - Raw bytes of the JSON payload
+ * @return True if valid, otherwise false
  */
-static void schema_free(WJElement schema, void *client);
+bool validate_json_buffer_buffer(const char* schema, const char* json_bytes);
 
 /**
- * Callback that gets called to print schema
- * errors if any to stderr
+ * Validate that the json data adheres to the given schema contained in the
+ * file pointed to by the schema_filename parameter.
  *
- *
- * @param client  - Calling object
- * @param format  - String to be printed
- * @return NULL
+ * @param schema_filename - JSON schema file to read
+ * @param json_bytes      - Raw bytes of the JSON payload
+ * @return True if valid, otherwise false
  */
-static void schema_error(void *client, const char *format, ...);
+bool validate_json_file_buffer(
+        const char* schema_filename, const char* json_bytes);
 
 /**
- * Validate the config json against the schema
+ * Validate that the json data in the JSON file adheres to the given schema
+ * contained in the file pointed to by the schema_filename parameter.
  *
- *
- * @param schema  - schema json object
- * @param config  - config json object
- * @return @c int - return 1 on success & 0 on failure
+ * @param schema_filename - JSON schema file to read
+ * @param json_file       - JSON payload file to validate against the schema
+ * @return True if valid, otherwise false
  */
-bool validate_json(WJElement schema, WJElement config);
+bool validate_json_file_file(
+        const char* schema_filename, const char* json_file);
 
-#ifdef __cplusplus
-}
-#endif
+}  // utils
+}  // eii
 
+#endif // _EII_UTILS_JSON_VALID_H

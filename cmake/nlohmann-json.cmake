@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Intel Corporation.
+# Copyright (c) 2021 Intel Corporation.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -18,14 +18,18 @@
 # FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-get_filename_component(IntelSafeString_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-include(CMakeFindDependencyMacro)
+include(FetchContent)
 
-list(APPEND CMAKE_MODULE_PATH ${IntelSafeString_CMAKE_DIR})
+message(STATUS "Downloading nlohmann_json dependencies, this could take a moment")
 
-if(NOT TARGET safestring)
-    include("${IntelSafeString_CMAKE_DIR}/IntelSafeStringTargets.cmake")
-endif()
+FetchContent_Declare(json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.10.4)
 
-set(IntelSafeString_LIBRARIES IntelSafeString)
-set(IntelSafeString_INCLUDE ${INSTALL_LIBDIR}/include)
+FetchContent_Declare(json-validator
+    GIT_REPOSITORY https://github.com/pboettch/json-schema-validator.git
+    GIT_TAG 2.1.0)
+
+FetchContent_MakeAvailable(json json-validator)
+
+message(STATUS "Finished downloading nlohmann_json dependencies")
