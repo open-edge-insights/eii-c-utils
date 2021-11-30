@@ -47,7 +47,7 @@ Additionally, EIIUtils depends on the below libraries. Follow their documentatio
 ## Compilation
 
 The EII Utils utilizes CMake as the build tool for compiling the C
-library. 
+library.
 
 CMAKE_INSTALL_PREFIX needs to be set for the build and installation:
 
@@ -72,6 +72,65 @@ below).
 ```sh
 $ cmake -DCMAKE_INSTALL_INCLUDEDIR=$CMAKE_INSTALL_PREFIX/include -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Debug ..
 ```
+
+## Packaging
+
+This library supports being packaged as a Debian, RPM, or Alpine APK packages.
+This is all accomplished via CMake. By default, packaging is disabled. To
+enable packaging, add the `-DPACKAGING=ON` flag to your CMake command (see
+Compilation section above). This command will look something like:
+
+```sh
+cmake -DPACKAGING=ON ..
+```
+
+By default, the packaging utilities will scan the system for the required
+toolchains it needs to build each package type (Deb, RPM, and APK). If it does
+not find the required toolsets, then it will disable that form of packaging.
+The packaging utilities provide CMake flags to force packaging as any of the
+supported package types. If a given package type, ex. APK, is set to be enabled
+manually by its CMake flag and its required packaging toolchain does not exist,
+then CMake will raise a fatal error.
+
+The table below provides the required toolchains for each package type as well
+as the CMake flag to set to `ON` to manually enable a packaging type:
+
+| Package Type | Required Tools | Manual Package Flag |
+| :----------: | :------------: | :-----------------: |
+| `deb`        | `dpkg-deb`     | `PACKAGE_DEB`       |
+| `rpm`        | `rpmbuild`     | `PACKAGE_RPM`       |
+| `apk`        | `docker`       | `PACKAGE_APK`       |
+
+> **NOTE:** Manually setting a given package type to be built (e.g. setting
+> `-DPACKAGE_DEB=ON`) still requires that the `-DPACKAGING=ON` to be set.
+
+After the required toolchains have been installed and CMake has been run with
+some combination of the packaging flags, the library can be packaged with the
+following commands:
+
+```sh
+make package
+```
+
+The command above will build the Debian and RPM packages (depending on the
+specified CMake flags).
+
+To build the Alpine APK package, execute the following command:
+
+```sh
+make package-apk
+```
+
+### A Note on Alpine APK Packaging
+
+In order to package the library as an Alpine APK package, the packaging utility
+must use a Docker container to have access to the proper Alpine APK toolchains.
+This container will automatically be built when the CMake command is ran to
+configure your build environment.
+
+By default, Alpine 3.14 is used to build the package. However, this version
+can be changed by setting the `APKBUILD_ALPINE_VERSION` CMake flag to the
+version of Alpine you wish to use (ex. `-DAPKBUILD_ALPINE_VERSION=3.12`).
 
 ## Installation
 
