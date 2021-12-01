@@ -18,31 +18,30 @@ of CMake, execute the following commands:
 
 ```sh
 # Remove old CMake version
-$ sudo apt -y purge cmake
-$ sudo apt -y autoremove
+sudo apt -y purge cmake
+sudo apt -y autoremove
 
 # Download CMake
-$ wget https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.sh
+wget https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.sh
 
 # Installation CMake
-$ sudo mkdir /opt/cmake
-$ sudo cmake-3.15.0-Linux-x86_64.sh --prefix=/opt/cmake --skip-license
+sudo mkdir /opt/cmake
+sudo cmake-3.15.0-Linux-x86_64.sh --prefix=/opt/cmake --skip-license
 
 # Make the command available to all users
-$ sudo update-alternatives --install /usr/bin/cmake cmake /opt/cmake/bin/cmake 1 --force
+sudo update-alternatives --install /usr/bin/cmake cmake /opt/cmake/bin/cmake 1 --force
 ```
 
 To install the remaining dependencies for the EIIUtils execute the following
 command:
 
 ```sh
-$ sudo -E ./install.sh
+sudo -E ./install.sh
 ```
 
 Additionally, EIIUtils depends on the below libraries. Follow their documentation to install them.
-* [IntelSafeString](../../libs/IntelSafeString/README.md)
-* [EIIMsgEnv](../../libs/EIIMsgEnv/README.md)
-
+- [IntelSafeString](../../libs/IntelSafeString/README.md)
+- [EIIMsgEnv](../../libs/EIIMsgEnv/README.md)
 
 ## Compilation
 
@@ -52,17 +51,17 @@ library.
 CMAKE_INSTALL_PREFIX needs to be set for the build and installation:
 
 ```sh
-    $ export CMAKE_INSTALL_PREFIX="/opt/intel/eii"
+    export CMAKE_INSTALL_PREFIX="/opt/intel/eii"
 ```
 
 The simplest sequence of commands for building the library are
 shown below.
 
 ```sh
-$ mkdir build
-$ cd build
-$ cmake -DCMAKE_INSTALL_INCLUDEDIR=$CMAKE_INSTALL_PREFIX/include -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX ..
-$ make
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_INCLUDEDIR=$CMAKE_INSTALL_PREFIX/include -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX ..
+make
 ```
 
 If you wish to compile the EII Utils in debug mode, then you can set
@@ -70,7 +69,7 @@ the `CMAKE_BUILD_TYPE` to `Debug` when executing the `cmake` command (as shown
 below).
 
 ```sh
-$ cmake -DCMAKE_INSTALL_INCLUDEDIR=$CMAKE_INSTALL_PREFIX/include -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Debug ..
+cmake -DCMAKE_INSTALL_INCLUDEDIR=$CMAKE_INSTALL_PREFIX/include -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Debug ..
 ```
 
 ## Packaging
@@ -141,7 +140,7 @@ If you wish to install the EII Utils on your system, execute the
 following command after building the library:
 
 ```sh
-$ sudo make install
+sudo make install
 ```
 
 By default, this command will install the EII Utils C library into
@@ -150,7 +149,7 @@ by default. As a result, you must add this directory to you `LD_LIBRARY_PATH`.
 This can be accomplished with the following `export`:
 
 ```sh
-$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/eii/lib/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/eii/lib/
 ```
 
 > **NOTE:** You can also specify a different library prefix to CMake through
@@ -165,9 +164,9 @@ Run the following commands from the `build/tests` folder to cover the unit
 tests.
 
 ```sh
-$ ./config-tests
-$ ./frame-tests
-$ ./log-tests
-$ ./thp-tests
-$ ./tsp-tests
+./config-tests
+./frame-tests
+./log-tests
+./thp-tests
+./tsp-tests
 ```
