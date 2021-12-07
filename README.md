@@ -3,7 +3,9 @@
 - [EII Utils](#eii-utils)
   - [Dependency Installation](#dependency-installation)
   - [Compilation](#compilation)
+  - [Packaging](#packaging)
   - [Installation](#installation)
+  - [Linking](#linking)
   - [Running Unit Tests](#running-unit-tests)
 
 # EII Utils
@@ -36,12 +38,11 @@ To install the remaining dependencies for the EIIUtils execute the following
 command:
 
 ```sh
-sudo -E ./install.sh
+sudo apt install libcjson-dev
 ```
 
-Additionally, EIIUtils depends on the below libraries. Follow their documentation to install them.
-- [IntelSafeString](../../libs/IntelSafeString/README.md)
-- [EIIMsgEnv](../../libs/EIIMsgEnv/README.md)
+> **NOTE:** For Fedora, the package installed should be `cjson-devel` and for
+> Alpine it is `cjson-dev`.
 
 ## Compilation
 
@@ -51,7 +52,7 @@ library.
 CMAKE_INSTALL_PREFIX needs to be set for the build and installation:
 
 ```sh
-    export CMAKE_INSTALL_PREFIX="/opt/intel/eii"
+export CMAKE_INSTALL_PREFIX="/opt/intel/eii"
 ```
 
 The simplest sequence of commands for building the library are
@@ -136,7 +137,35 @@ version of Alpine you wish to use (ex. `-DAPKBUILD_ALPINE_VERSION=3.12`).
 > **NOTE:** This is a mandatory step to use this library in
 > C/C++ EII modules and EII Message Bus library.
 
-If you wish to install the EII Utils on your system, execute the
+The EII Utils library can be installed in two different ways.
+
+1. Through published Debian, Fedora, or Alpine APK packages
+2. Installing form source
+
+If you are installing from one of the packages, select the package you wish to
+install from the releases assets, and then run one of the following depending
+on the OS you are installing on:
+
+```sh
+# Debian
+sudo apt install libcjson1
+sudo dpkg -i <debian package>
+
+# Fedora
+sudo dnf install cjson
+sudo rpm -i <rpm package>
+
+# Alpine (NOTE: the depencies get automatically installed by the apk command)
+sudo apk add --allow-untrusted <apk package>
+```
+
+> **NOTE:** In the above commands, installing the cJSON dependency is required,
+> however, in general installation of the dev module is not required. However,
+> when building against this library the installing the dev version of the
+> library is required. For Ubuntu this is `libcjson-dev`, Fedora is `cjson-devel`
+> and Alpine is `cjson-dev`.
+
+If you wish to install the EII Utils on your system from source, execute the
 following command after building the library:
 
 ```sh
@@ -154,6 +183,26 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/eii/lib/
 
 > **NOTE:** You can also specify a different library prefix to CMake through
 > the `CMAKE_INSTALL_PREFIX` flag. If different installation path is given via `CMAKE_INSTALL_PREFIX`, then `$LD_LIBRARY_PATH` should be appended by $CMAKE_INSTALL_PREFIX/lib.
+
+## Linking
+
+It is recommended to link to the library using the CMake build system. To do
+this you must use the `find_package()` method in CMake to find and include the
+package.
+
+The example below showcases how this can be accomplished.
+
+```cmake
+# Find the package
+find_package(EIIUtils REQUIRED)
+
+# Add the include directories
+include_directories(${EIIUtils_INCLUDE})
+
+# Link to your executable (NOTE: 'src/example.cpp' is just an example path)
+add_executable(example "src/example.cpp")
+target_link_libraries(example ${EIIUtils_LIBRARIES})
+```
 
 ## Running Unit Tests
 

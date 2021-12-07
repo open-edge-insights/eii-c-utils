@@ -28,14 +28,18 @@ if(NOT CJSON_INCLUDE_DIR)
     message(FATAL_ERROR "-- Failed to find cJSON include path")
 endif()
 
-find_library(CJSON_LIBRARY NAMES cjson)
-if(NOT CJSON_LIBRARY)
+find_library(INTERNAL_CJSON_LIBRARY NAMES cjson)
+if(NOT INTERNAL_CJSON_LIBRARY)
     message(FATAL_ERROR "-- Failed to find cJSON library")
 endif()
 
-set(CJSON_LIBRARIES ${CJSON_LIBRARY})
+
+add_library(cjson SHARED IMPORTED GLOBAL)
+set_property(TARGET cjson PROPERTY
+    IMPORTED_LOCATION "${INTERNAL_CJSON_LIBRARY}")
+
 set(CJSON_INCLUDE_DIRS ${CJSON_INCLUDE_DIR})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-    CJSON DEFAULT_MSG CJSON_LIBRARIES CJSON_INCLUDE_DIRS)
+    CJSON DEFAULT_MSG CJSON_INCLUDE_DIRS)

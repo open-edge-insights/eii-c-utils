@@ -69,7 +69,7 @@ add_library(eiiutils SHARED ${SOURCES})
 target_link_libraries(eiiutils
     PUBLIC
         pthread
-        ${CJSON_LIBRARIES}
+        cjson
     PRIVATE
         safestring
         nlohmann_json::nlohmann_json
