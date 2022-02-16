@@ -44,7 +44,11 @@ set(CMAKE_C_FLAGS "-fPIE -fPIC -O2 -Wall -pedantic -fstack-protector-strong -D_F
 set(CMAKE_CXX_FLAGS "-fPIE -fPIC -O2 -Wall -pedantic -fstack-protector-strong -D_FORTIFY_SOURCE=2")
 
 # Set LDFLAGS
-set(CMAKE_SHARED_LINKER_FLAGS "-z noexecstack -z relro -z now")
+if(NOT ${APPLE})
+    # These flags aren't supported on MacOS, and cause a build error. Equivalent
+    # effects are enabled by default.
+    set(CMAKE_SHARED_LINKER_FLAGS "-z noexecstack -z relro -z now")
+endif()
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -76,6 +80,8 @@ target_link_libraries(eiiutils
         nlohmann_json_schema_validator
         ${OpenCV_LIBRARIES}
         ${CMAKE_DL_LIBS})
+target_include_directories(eiiutils
+    SYSTEM PRIVATE "${CJSON_INCLUDE_DIRS}")
 
 # If compile in debug mode, set DEBUG flag for C code
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")

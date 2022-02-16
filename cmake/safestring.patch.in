@@ -1,0 +1,13 @@
+diff --git a/include/safe_str_lib.h b/include/safe_str_lib.h
+index e50df36..3c82f01 100644
+--- a/include/safe_str_lib.h
++++ b/include/safe_str_lib.h
+@@ -41,7 +41,7 @@
+ #define RSIZE_MIN_STR      ( 1 )
+ 
+ /* maximum sring length */
+-#define RSIZE_MAX_STR      ( 4UL << 10 )      /* 4KB */
++#define RSIZE_MAX_STR      ( @MAX_SAFESTRING_SIZE@ << 10 )      /* @MAX_SAFESTRING_SIZE@KB */
+ 
+ 
+ /* The makeup of a password */

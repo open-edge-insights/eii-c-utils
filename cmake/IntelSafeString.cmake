@@ -21,14 +21,10 @@
 set(INTEL_SAFESTRING_DIR "${CMAKE_CURRENT_BINARY_DIR}/IntelSafeString")
 
 set (MAX_SAFESTRING_SIZE "60")
-set (sed_cmd "sed")
-set (sed_arg1 "-i")
-set (sed_arg2 "/RSIZE_MAX_STR/c\#define RSIZE_MAX_STR      ( ${MAX_SAFESTRING_SIZE}UL << 10 )      /* ${MAX_SAFESTRING_SIZE}KB */")
-set (sed_arg3 "${INTEL_SAFESTRING_DIR}/safestring-src/include/safe_str_lib.h")
 
 # Download Intel Safe String library source code
 configure_file(
-    "cmake/IntelSafeString.txt.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/IntelSafeString.txt.in"
     "${INTEL_SAFESTRING_DIR}/safestring-download/CMakeLists.txt")
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
                 RESULT_VARIABLE ss_result
@@ -44,8 +40,54 @@ if(result)
     message(FATAL_ERROR "Build step for safestring failed: ${ss_result}")
 endif()
 
+if(${APPLE})
+    # Apply fixes to allow build on MacOS
+    #
+    # Note that this is only for development, not for testing or deployment.
+    execute_process(COMMAND "patch"
+        "${INTEL_SAFESTRING_DIR}/safestring-src/CMakeLists.txt"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/safestring-cmake.patch"
+        RESULT_VARIABLE ssc_result
+    )
+    if(ssc_result)
+        message(FATAL_ERROR "Failed to patch safestring CMakeLists")
+    endif()
+
+    execute_process(COMMAND "patch"
+        "${INTEL_SAFESTRING_DIR}/safestring-src/makefile"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/safestring-make.patch"
+        RESULT_VARIABLE ssc_result
+    )
+    if(ssc_result)
+        message(FATAL_ERROR "Failed to patch safestring Makefile")
+    endif()
+
+    # SafeString lib uses redefines memset_s in a standards-incompatible way,
+    # which breaks the build. Replace with OS-defined implementation.
+    execute_process(COMMAND "patch"
+        "${INTEL_SAFESTRING_DIR}/safestring-src/include/safe_mem_lib.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/safestring-memlib.patch"
+        RESULT_VARIABLE ssc_result
+    )
+    if(ssc_result)
+        message(FATAL_ERROR "Failed to patch safestring memlib")
+    endif()
+
+    execute_process(COMMAND "patch"
+        "${INTEL_SAFESTRING_DIR}/safestring-src/safeclib/memset_s.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/safestring-memlib-c.patch"
+        RESULT_VARIABLE ssc_result
+    )
+    if(ssc_result)
+        message(FATAL_ERROR "Failed to patch safestring memlib")
+    endif()
+endif()
+
 execute_process(COMMAND "echo" "Changing safe_str_lib.h file")
-execute_process(COMMAND ${sed_cmd} ${sed_arg1} ${sed_arg2} ${sed_arg3}
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/safestring.patch.in" safestring.patch)
+execute_process(COMMAND "patch"
+                    "${INTEL_SAFESTRING_DIR}/safestring-src/include/safe_str_lib.h"
+                    "${CMAKE_CURRENT_BINARY_DIR}/safestring.patch"
                 RESULT_VARIABLE ss_result
                 OUTPUT_VARIABLE ss_output_var)
 

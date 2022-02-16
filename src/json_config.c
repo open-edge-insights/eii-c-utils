@@ -27,7 +27,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <cjson/cJSON.h>
+#include <cJSON.h>
 
 #include "eii/utils/json_config.h"
 #include "eii/utils/logger.h"
