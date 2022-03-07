@@ -104,7 +104,8 @@ set(CPACK_PACKAGE_DESCRIPTION "${PROJECT_DESCRIPTION}")
 
 # Debian package specific settings
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Intel Corporation")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libcjson1 (>= 1.7.10)")
+## TODO: Come up with right way for adding dependency versions
+# set(CPACK_DEBIAN_PACKAGE_DEPENDS "libcjson1 (>= 1.7.10)")
 
 # RPM package specific settings
 set(CPACK_RPM_PACKAGE_REQUIRES "cjson >= 1.7.14")

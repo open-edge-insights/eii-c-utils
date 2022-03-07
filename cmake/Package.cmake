@@ -115,11 +115,12 @@ if(PACKAGING)
 
     message("*")
     message("* Debian Package:")
-    if(PACKAGE_DEB)
-        message("*  DEBIAN DEPENDENCIES.......: ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
-    else()
-        message("*  No Debian Package")
-    endif()
+    ## TODO: Come up with right way for adding dependency versions
+    # if(PACKAGE_DEB)
+    #     message("*  DEBIAN DEPENDENCIES.......: ${CPACK_DEBIAN_PACKAGE_DEPENDS}")
+    # else()
+    #     message("*  No Debian Package")
+    # endif()
 
     message("*")
     message("* RPM Package:")
