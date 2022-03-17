@@ -1,22 +1,24 @@
-**Contents**
+# Contents
 
-- [EII Utils](#eii-utils)
+- [Contents](#contents)
+  - [OEI Utils](#oei-utils)
   - [Dependency Installation](#dependency-installation)
   - [Compilation](#compilation)
   - [Packaging](#packaging)
+    - [A Note on Alpine APK Packaging](#a-note-on-alpine-apk-packaging)
   - [Installation](#installation)
   - [Linking](#linking)
   - [Running Unit Tests](#running-unit-tests)
 
-# EII Utils
+## OEI Utils
 
-EII Utils is a C library providing commonly used APIs across the C/C++ EII modules, EII Message Bus and Config Manager libraries.
+Open Edge Insights (OEI) Utils is a C library providing commonly used APIs across the C/C++ OEI modules, Message Bus, and Config Manager libraries.
+
+>**Note:** In this document, you will find labels of 'Edge Insights for Industrial (EII)' for filenames, paths, code snippets, and so on. Consider the references of EII as OEI. This is due to the product name change of EII as OEI.
 
 ## Dependency Installation
 
-The EIIUtils depends on CMake version 3.11+. For Ubuntu 18.04 this is not
-the default version installed via `apt-get`. To install the correct version
-of CMake, execute the following commands:
+The OEI Utils depends on CMake version 3.11+. For Ubuntu 18.04 this is not the default version installed via `apt-get`. To install the correct version of CMake, execute the following commands:
 
 ```sh
 # Remove old CMake version
@@ -34,7 +36,7 @@ sudo cmake-3.15.0-Linux-x86_64.sh --prefix=/opt/cmake --skip-license
 sudo update-alternatives --install /usr/bin/cmake cmake /opt/cmake/bin/cmake 1 --force
 ```
 
-To install the remaining dependencies for the EIIUtils execute the following
+To install the remaining dependencies for the OEI Utils execute the following
 command:
 
 ```sh
@@ -46,8 +48,7 @@ sudo apt install libcjson-dev
 
 ## Compilation
 
-The EII Utils utilizes CMake as the build tool for compiling the C
-library.
+The OEI Utils utilizes CMake as the build tool for compiling the C library.
 
 CMAKE_INSTALL_PREFIX needs to be set for the build and installation:
 
@@ -55,8 +56,7 @@ CMAKE_INSTALL_PREFIX needs to be set for the build and installation:
 export CMAKE_INSTALL_PREFIX="/opt/intel/eii"
 ```
 
-The simplest sequence of commands for building the library are
-shown below.
+The simplest sequence of commands for building the library are shown below.
 
 ```sh
 mkdir build
@@ -65,7 +65,7 @@ cmake -DCMAKE_INSTALL_INCLUDEDIR=$CMAKE_INSTALL_PREFIX/include -DCMAKE_INSTALL_P
 make
 ```
 
-If you wish to compile the EII Utils in debug mode, then you can set
+If you wish to compile the OEI Utils in debug mode, then you can set
 the `CMAKE_BUILD_TYPE` to `Debug` when executing the `cmake` command (as shown
 below).
 
@@ -135,9 +135,9 @@ version of Alpine you wish to use (ex. `-DAPKBUILD_ALPINE_VERSION=3.12`).
 ## Installation
 
 > **NOTE:** This is a mandatory step to use this library in
-> C/C++ EII modules and EII Message Bus library.
+> C/C++ OEI modules and Message Bus library.
 
-The EII Utils library can be installed in two different ways.
+The OEI Utils library can be installed in two different ways.
 
 1. Through published Debian, Fedora, or Alpine APK packages
 2. Installing form source
@@ -165,14 +165,14 @@ sudo apk add --allow-untrusted <apk package>
 > library is required. For Ubuntu this is `libcjson-dev`, Fedora is `cjson-devel`
 > and Alpine is `cjson-dev`.
 
-If you wish to install the EII Utils on your system from source, execute the
+If you wish to install the OEI Utils on your system from source, execute the
 following command after building the library:
 
 ```sh
 sudo make install
 ```
 
-By default, this command will install the EII Utils C library into
+By default, this command will install the OEI Utils C library into
 `/opt/intel/eii/lib/`. On some platforms this is not included in the `LD_LIBRARY_PATH`
 by default. As a result, you must add this directory to you `LD_LIBRARY_PATH`.
 This can be accomplished with the following `export`:
