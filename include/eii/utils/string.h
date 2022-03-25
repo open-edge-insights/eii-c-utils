@@ -75,7 +75,7 @@ void free_mem(char** arr);
  * @param end_point - endpoint
  *  @return NULL for any errors occured or char** on success
  */
-char** get_host_port(const char* end_point);
+char** get_host_port(char* end_point);
 
 #ifdef __cplusplus
 } // __cplusplus

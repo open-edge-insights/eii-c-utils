@@ -28,7 +28,7 @@
 #include "eii/utils/string.h"
 
 // helper function to fetch host & port from endpoint
-char** get_host_port(const char* end_point) {
+char** get_host_port(char* end_point) {
     char** host_port = NULL;
     char* data = NULL;
     host_port = (char **)calloc(strlen(end_point) + 1, sizeof(char*));

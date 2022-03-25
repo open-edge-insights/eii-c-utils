@@ -19,13 +19,36 @@
 # IN THE SOFTWARE.
 
 cmake_minimum_required(VERSION 3.12)
-project(eii-utils VERSION 1.0.0 LANGUAGES C CXX)
+project(eii-utils
+    VERSION 3.0.0
+    LANGUAGES C CXX
+    DESCRIPTION "Intel's Edge Insights for Industrial (EII) C/C++ Utility Library"
+    HOMEPAGE_URL "https://github.com/open-edge-insights/eii-c-utils")
+
+set(PROJECT_LICENSE "MIT")
 
 # Define CMake options
 option(WITH_TESTS    "Compile with unit tests" OFF)
 
-set(EII_COMMON_CMAKE "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake")
+if(NOT DEFINED "CMAKE_BUILD_TYPE" OR "${CMAKE_BUILD_TYPE}" STREQUAL "")
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 set(EII_C_UTILS_CMAKE "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# Set C standard to C11
+set(CMAKE_C_STANDARD 11)
+
+# Set CFLAGS
+set(CMAKE_C_FLAGS "-fPIE -fPIC -O2 -Wall -pedantic -fstack-protector-strong -fno-strict-overflow -fno-delete-null-pointer-checks -fwrapv -D_FORTIFY_SOURCE=2")
+set(CMAKE_CXX_FLAGS "-fPIE -fPIC -O2 -Wall -pedantic -fstack-protector-strong -fno-strict-overflow -fno-delete-null-pointer-checks -fwrapv -D_FORTIFY_SOURCE=2")
+
+# Set LDFLAGS
+if(NOT ${APPLE})
+    # These flags aren't supported on MacOS, and cause a build error. Equivalent
+    # effects are enabled by default.
+    set(CMAKE_SHARED_LINKER_FLAGS "-z noexecstack -z relro -z now")
+endif()
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -34,24 +57,13 @@ set(CMAKE_MODULE_PATH "${EII_C_UTILS_CMAKE}")
 
 # Find packages
 find_package(cJSON REQUIRED)
-find_package(IntelSafeString REQUIRED)
-find_package(WJE REQUIRED)
 
-# Export compile commands
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json")
-    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json
-        ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json
-    )
-endif()
+# Add the IntelSafeString as part of this project
+include(cmake/IntelSafeString.cmake)
+include(cmake/nlohmann-json.cmake)
 
 # Include header directories
-include_directories(
-    include/
-    ${CJSON_LIBRARIES}/
-    ${IntelSafeString_INCLUDE}/
-    ${WJE_INCLUDE_DIRS})
+include_directories(include/)
 
 # Get all source files
 file(GLOB SOURCES "src/*.c" "src/*.cpp")
@@ -60,12 +72,17 @@ link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 # Add target
 add_library(eiiutils SHARED ${SOURCES})
 target_link_libraries(eiiutils
+    PUBLIC
+        pthread
+        cjson
     PRIVATE
-        ${CJSON_LIBRARIES}
+        safestring
+        nlohmann_json::nlohmann_json
+        nlohmann_json_schema_validator
         ${OpenCV_LIBRARIES}
-        ${IntelSafeString_LIBRARIES}
-        ${CMAKE_DL_LIBS}
-        ${WJE_LIBRARY})
+        ${CMAKE_DL_LIBS})
+target_include_directories(eiiutils
+    SYSTEM PRIVATE "${CJSON_INCLUDE_DIRS}")
 
 # If compile in debug mode, set DEBUG flag for C code
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -77,71 +94,36 @@ if(WITH_TESTS)
     add_subdirectory(tests/)
 endif()
 
-##
-## Configure pkg-config file to be installed for the EII Utils
-##
-set(PKG_CONFIG_IN  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/libeiiutils.pc.in")
-set(PKG_CONFIG_OUT "${CMAKE_CURRENT_BINARY_DIR}/libeiiutils.pc")
-set(DEST_DIR       "${CMAKE_INSTALL_PREFIX}")
-set(PRIVATE_LIBS   "-lcjson")
+# Include installation of the library
+include(cmake/InstallEIIUtils.cmake)
 
-configure_file(${PKG_CONFIG_IN} ${PKG_CONFIG_OUT} @ONLY)
+# Generate packages for the library
+# Set base CPack settings and include packaging helper CMake script
+set(CPACK_PACKAGE_VENDOR "Intel Corporation")
 
-##
-## Add CMake configuration for installing the library including files for other
-## projects finding the library using CMake
-##
+set(CPACK_PACKAGE_DESCRIPTION "${PROJECT_DESCRIPTION}")
 
-include(GNUInstallDirs)
-set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/EIIUtils)
+# Debian package specific settings
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Intel Corporation")
+## TODO: Come up with right way for adding dependency versions
+# set(CPACK_DEBIAN_PACKAGE_DEPENDS "libcjson1 (>= 1.7.10)")
 
-install(TARGETS eiiutils
-    EXPORT eiiutils-targets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+# RPM package specific settings
+set(CPACK_RPM_PACKAGE_REQUIRES "cjson >= 1.7.14")
 
-set_target_properties(eiiutils PROPERTIES EXPORT_NAME EIIUtils)
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+# APK specific settings
+set(APKBUILD_DEPENDS "cjson")
+set(APKBUILD_DEPENDS_DEV "")
+set(APKBUILD_DEPENDS_MAKE "cjson-dev")
 
-# Install pkg-config libeiiutils.pc file
-install(
-    FILES
-        ${PKG_CONFIG_OUT}
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/pkgconfig
-)
+# Include packaging utility
+include(cmake/Package.cmake)
 
-# Export targets to a script
-install(EXPORT eiiutils-targets
-    FILE
-        EIIUtilsTargets.cmake
-    DESTINATION
-        ${INSTALL_CONFIGDIR}
-)
-
-# Create a ConfigVersion.cmake file
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/EIIUtilsConfigVersion.cmake
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
-)
-
-configure_package_config_file(
-    ${CMAKE_CURRENT_LIST_DIR}/cmake/EIIUtilsConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/EIIUtilsConfig.cmake
-    INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
-)
-
-# Install the config, configversion and custom find modules
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/EIIUtilsConfigVersion.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/EIIUtilsConfig.cmake
-    DESTINATION ${INSTALL_CONFIGDIR}
-)
-
-export(EXPORT eiiutils-targets
-    FILE ${CMAKE_CURRENT_BINARY_DIR}/EIIUtilsTargets.cmake)
-
-# Register package in user's package registry
-export(PACKAGE EIIUtils)
+# Export compile commands
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json")
+    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json
+        ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json
+    )
+endif()

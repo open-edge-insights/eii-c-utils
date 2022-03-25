@@ -1,0 +1,17 @@
+diff --git a/safeclib/memset_s.c b/safeclib/memset_s.c
+index f19717d..77cdf0e 100644
+--- a/safeclib/memset_s.c
++++ b/safeclib/memset_s.c
+@@ -35,6 +35,7 @@
+ #include "safe_mem_lib.h"
+ 
+ 
++#ifndef __APPLE__
+ /**
+  * NAME
+  *    memset_s
+@@ -103,3 +104,4 @@ memset_s (void *dest, rsize_t len, uint8_t value)
+     return (RCNEGATE(EOK));
+ }
+ EXPORT_SYMBOL(memset_s)
++#endif

@@ -1,4 +1,4 @@
-# Copyright (c) 2019 Intel Corporation.
+# Copyright (c) 2021 Intel Corporation.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -18,18 +18,18 @@
 # FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-cmake_minimum_required(VERSION 2.8.2)
+include(FetchContent)
 
-project(safestring-download NONE)
+message(STATUS "Downloading nlohmann_json dependencies, this could take a moment")
 
-include(ExternalProject)
-ExternalProject_Add(safestring
-  GIT_REPOSITORY    https://github.com/intel/safestringlib.git
-  GIT_TAG           5f8ce199e491c5bea65fdef85b671a25f252768d
-  SOURCE_DIR        "${CMAKE_CURRENT_SOURCE_DIR}/safestring-src"
-  BINARY_DIR        "${CMAKE_CURRENT_BINARY_DIR}/safestring-build"
-  CONFIGURE_COMMAND ""
-  BUILD_COMMAND     ""
-  INSTALL_COMMAND   ""
-  TEST_COMMAND      ""
-)
+FetchContent_Declare(json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.10.4)
+
+FetchContent_Declare(json-validator
+    GIT_REPOSITORY https://github.com/pboettch/json-schema-validator.git
+    GIT_TAG 2.1.0)
+
+FetchContent_MakeAvailable(json json-validator)
+
+message(STATUS "Finished downloading nlohmann_json dependencies")
