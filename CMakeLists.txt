@@ -67,7 +67,6 @@ include_directories(include/)
 
 # Get all source files
 file(GLOB SOURCES "src/*.c" "src/*.cpp")
-link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 
 # Add target
 add_library(eiiutils SHARED ${SOURCES})
